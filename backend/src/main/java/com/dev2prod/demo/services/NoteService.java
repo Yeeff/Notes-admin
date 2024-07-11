@@ -8,6 +8,8 @@ import com.dev2prod.demo.domain.entities.TagEntity;
 import com.dev2prod.demo.repositories.TagRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 import java.util.Optional;
@@ -36,7 +38,7 @@ public class NoteService {
     public void deleteEmployee(Long empId) {
         noteRepo.deleteById(empId);
     }
-    
+
 
     public NoteEntity saveNote(NoteEntity note) {
         try{
@@ -146,5 +148,10 @@ public class NoteService {
         note.setTags(tagsSet);
 
         return noteRepo.save(note);
+    }
+
+    @Transactional
+    public List<NoteEntity> getActivesByTagId( Long id){
+        return noteRepo.findByIsArchivedFalseAndTags_Id(id);
     }
 }

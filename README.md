@@ -7,6 +7,8 @@ This project is a application for managing text notes. The application is built 
 - **Create, edit, and delete notes**
 - **Archive and unarchive notes**
 - **List active and archived notes**
+- **Add and remove tags**
+- **Filter notes by tags**
 
 ## **Technologies Used**
 

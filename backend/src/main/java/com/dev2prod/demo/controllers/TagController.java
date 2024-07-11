@@ -1,6 +1,7 @@
 package com.dev2prod.demo.controllers;
 
 import com.dev2prod.demo.domain.dtos.TagDto;
+import com.dev2prod.demo.domain.entities.NoteEntity;
 import com.dev2prod.demo.domain.entities.TagEntity;
 import com.dev2prod.demo.mappers.impl.TagMapper;
 import com.dev2prod.demo.services.TagService;
@@ -47,4 +48,6 @@ public class TagController {
                 .map(mapper::mapToDto)
                 .collect(Collectors.toList());
     }
+
+
 }

@@ -9,6 +9,7 @@ import java.util.Optional;
 public interface NoteRepository extends JpaRepository<NoteEntity, Long> {
     List<NoteEntity> findByIsArchivedFalse();
     List<NoteEntity> findByIsArchivedTrue();
+    List<NoteEntity> findByIsArchivedFalseAndTags_Id(Long id);
     Boolean existsByTitle(String title);
     Optional<NoteEntity> findByTitle(String title);
 }

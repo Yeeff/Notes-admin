@@ -12,4 +12,5 @@ export const archiveNote = (id) => axios.patch(`${API_URL}/archive/${id}`);
 export const unarchiveNote = (id) => axios.patch(`${API_URL}/unarchive/${id}`);
 export const assignTagToNote = (noteId, tagId) => axios.patch(`${API_URL}/${noteId}/addTag/${tagId}`);
 export const removeTagToNote = (noteId, tagId) => axios.patch(`${API_URL}/${noteId}/removeTag/${tagId}`);
+export const activeNotesByTagId = ( tagId) => axios.get(`${API_URL}/activesByTag/${tagId}`);
 

@@ -126,4 +126,9 @@ public class NoteController {
         return ResponseEntity.status(HttpStatus.OK).body(noteServices.removeTagToNote(noteId, tagId));
     }
 
+    @GetMapping("/activesByTag/{tagId}")
+    public List<NoteEntity> getActivesNotesByTagId(@PathVariable Long tagId){
+        return noteServices.getActivesByTagId(tagId);
+    }
+
 }
