@@ -1,0 +1,28 @@
+.tag-icon-container {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .fas.fa-tags {
+    cursor: pointer;
+    font-size: 24px;
+  }
+  
+  .tag-list {
+    position: absolute;
+    top: -100%; /* Adjust this value as needed */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 5px 10px;
+    list-style: none;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+  }
+  
+  .tag-list li {
+    margin: 5px 0;
+  }
+  

@@ -1,0 +1,21 @@
+# IntelliJ IDEA files
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Compiled files
+out/
+
+# Spring Boot logs
+logs/
+
+# IDE-specific directories
+.vscode/
+
+# Operating System files
+.DS_Store
+Thumbs.db
+
+# Maven specific files
+

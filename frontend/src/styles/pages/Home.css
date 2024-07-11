@@ -1,0 +1,18 @@
+.home .actives_title{
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.home .controls{
+    display: flex;
+    justify-content: space-between;
+}
+
+.home .add_control{
+    color: blue;
+    font-size: 15px;
+}
+
+i{
+    margin-right: 5px;
+}
