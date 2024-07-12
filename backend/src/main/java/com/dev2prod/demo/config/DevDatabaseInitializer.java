@@ -7,11 +7,12 @@ import com.dev2prod.demo.repositories.TagRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
 import java.util.HashSet;
 
 @Configuration
-//@Profile({"test","dev"})
+@Profile("dev")
 public class DevDatabaseInitializer implements CommandLineRunner {
     private final NoteRepository repo;
     private  final TagRepository tagRepo;

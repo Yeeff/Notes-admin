@@ -25,21 +25,6 @@ public class NoteService {
         this.tagRepo = tagRepository;
     }
 
-    public void saveEmployee(NoteEntity empObj) {
-        noteRepo.save(empObj);
-    }
-
-    public List<NoteEntity> getEmployeeDetails(Long empId) {
-
-            return noteRepo.findAll();
-
-    }
-
-    public void deleteEmployee(Long empId) {
-        noteRepo.deleteById(empId);
-    }
-
-
     public NoteEntity saveNote(NoteEntity note) {
         try{
             return noteRepo.save(note);
@@ -71,10 +56,6 @@ public class NoteService {
         return noteRepo.existsById(id);
     }
 
-
-    public Boolean existByTitle(String title) {
-        return noteRepo.existsByTitle(title);
-    }
 
     public NoteEntity partialUpdate(Long id, NoteEntity note) {
         return noteRepo.findById(id)

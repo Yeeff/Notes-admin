@@ -1,17 +1,12 @@
-FROM eclipse-temurin:21.0.3_9-jdk
 
-WORKDIR /root
+FROM openjdk:17-jdk-alpine
 
-COPY ./pom.xml /root
-COPY ./.mvn /root/.mvn
-COPY ./mvnw /root
+RUN addgroup -S app && adduser -S app -G app
 
-RUN ./mvnw dependency:go-offline
+USER app
 
-COPY ./src /root/src
+COPY target/*.jar app.jar
 
-RUN ./mvnw clean install -DskipTests
-
-ENTRYPOINT ["java","-jar","/root/target/notes-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["java", "-jar", "/app.jar"]
 
 
