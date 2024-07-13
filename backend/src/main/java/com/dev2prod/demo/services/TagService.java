@@ -14,16 +14,16 @@ public class TagService {
         this.tagRepo = tagRepo;
     }
 
-    public void saveProject(TagEntity projectObj) {
+    public void saveTag(TagEntity projectObj) {
         tagRepo.save(projectObj);
     }
 
-    public List<TagEntity> getProjectDetails(Long projectId) {
+    public List<TagEntity> getTagDetails(Long projectId) {
             return tagRepo.findAll();
 
     }
 
-    public void deleteProject(Long projectId) {
+    public void deleteTag(Long projectId) {
         tagRepo.deleteById(projectId);
     }
 

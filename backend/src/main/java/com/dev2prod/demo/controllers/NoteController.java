@@ -82,7 +82,7 @@ public class NoteController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<NoteDto> deleteProduct(@PathVariable Long id){
+    public ResponseEntity<NoteDto> deleteNote(@PathVariable Long id){
         noteServices.deleteNote(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

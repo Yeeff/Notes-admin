@@ -26,18 +26,18 @@ public class TagController {
 
     @PostMapping("/save")
     public ResponseEntity createProject(@RequestBody TagEntity projectObj) {
-        tagServices.saveProject(projectObj);
+        tagServices.saveTag(projectObj);
         return new ResponseEntity(HttpStatus.CREATED);
     }
 
     @GetMapping(value = {"/getProjects", "/{projectId}"})
     public List<TagEntity> getProjects(@PathVariable(required = false) Long projectId) {
-        return tagServices.getProjectDetails(projectId);
+        return tagServices.getTagDetails(projectId);
     }
 
     @DeleteMapping("/delete/{projectId}")
     public ResponseEntity removeProject(@PathVariable Long projectId) {
-        tagServices.deleteProject(projectId);
+        tagServices.deleteTag(projectId);
         return new ResponseEntity(HttpStatus.OK);
     }
 

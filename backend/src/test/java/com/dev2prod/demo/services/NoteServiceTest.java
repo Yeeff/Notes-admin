@@ -1,9 +1,9 @@
 package com.dev2prod.demo.services;
 
 import com.dev2prod.demo.domain.entities.NoteEntity;
+import com.dev2prod.demo.domain.entities.TagEntity;
 import com.dev2prod.demo.exceptions.ResourceNotFoundException;
-import jdk.jshell.spi.ExecutionControl;
-import org.junit.jupiter.api.BeforeAll;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,8 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.testng.Assert;
-import org.testng.annotations.BeforeClass;
 
 import java.util.List;
 
@@ -24,9 +22,13 @@ import static org.junit.jupiter.api.Assertions.*;
 class NoteServiceTest {
     @Autowired
     NoteService noteService;
+    @Autowired
+    TagService tagService;
 
     NoteEntity note1;
     NoteEntity note2;
+
+    TagEntity tag;
 
     @BeforeEach
     public void setUp(){
@@ -41,6 +43,9 @@ class NoteServiceTest {
                 .content("Content test 2")
                 .isArchived(false)
                 .build();
+
+        tag = new TagEntity();
+        tag.setName("Title");
 
     }
 
@@ -84,36 +89,84 @@ class NoteServiceTest {
 
     @Test
     void requestToDeleteA_Not_Existing_Note_shouldReturnAResourceNotFoundException() {
+        assertThrows( ResourceNotFoundException.class, () -> {
+            noteService.getById(1L);
+        });
+    }
+
+    @Test
+    void requestToDeleteA_Note_shouldReturnHttpNoContent() {
 
         NoteEntity noteSaved = noteService.saveNote(note1);
 
         noteService.deleteNote(noteSaved.getId());
 
         assertThrows( ResourceNotFoundException.class, () -> {
-            noteService.getById(note1.getId());
+            noteService.getById(noteSaved.getId());
         });
 
-
-    }
-
-    /*@Test
-    void getActiveNotes() {
     }
 
     @Test
-    void getArchivedNotes() {
+    void requestGetActiveNotesShouldReturnJustActives() {
+        note1.setIsArchived(false);
+        note2.setIsArchived(true);
+        noteService.saveNote(note1);
+        noteService.saveNote(note2);
+
+        List<NoteEntity> notesList = noteService.getActiveNotes();
+
+        assertEquals(1, notesList.size());
+        assertEquals(false, notesList.get(0).getIsArchived());
     }
 
     @Test
-    void archiveNote() {
+    void requestGetArchivedNotesShouldReturnJustArchived() {
+        note1.setIsArchived(true);
+        note2.setIsArchived(false);
+        noteService.saveNote(note1);
+        noteService.saveNote(note2);
+
+        List<NoteEntity> notesList = noteService.getArchivedNotes();
+
+        assertEquals(1, notesList.size());
+        assertEquals(true, notesList.get(0).getIsArchived());
     }
 
     @Test
-    void unarchiveNote() {
+    void requestArchiveA_NoteShouldArchiveThatNote() {
+        note1.setIsArchived(false);
+        noteService.saveNote(note1);
+
+        noteService.archiveNote(note1.getId());
+
+        NoteEntity noteSaved = noteService.getById(note1.getId());
+
+        assertEquals(true, noteSaved.getIsArchived());
     }
 
+    @Test
+    void requestUnArchiveA_NoteShouldUnArchiveThatNote() {
+        note1.setIsArchived(true);
+        noteService.saveNote(note1);
+
+        noteService.unarchiveNote(note1.getId());
+
+        NoteEntity noteSaved = noteService.getById(note1.getId());
+
+        assertEquals(false, noteSaved.getIsArchived());
+    }
+    /*@Transactional
     @Test
     void assignTagToNote() {
+        noteService.saveNote(note1);
+        tagService.saveTag(tag);
+
+        noteService.assignTagToNote(note1.getId(), tag.getId());
+
+        NoteEntity noteSaved = noteService.getById(note1.getId());
+        assertEquals(1, noteSaved.getTags().size());
+
     }
 
     @Test
