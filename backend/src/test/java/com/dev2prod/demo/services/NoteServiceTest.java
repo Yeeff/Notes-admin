@@ -156,24 +156,4 @@ class NoteServiceTest {
 
         assertEquals(false, noteSaved.getIsArchived());
     }
-    /*@Transactional
-    @Test
-    void assignTagToNote() {
-        noteService.saveNote(note1);
-        tagService.saveTag(tag);
-
-        noteService.assignTagToNote(note1.getId(), tag.getId());
-
-        NoteEntity noteSaved = noteService.getById(note1.getId());
-        assertEquals(1, noteSaved.getTags().size());
-
-    }
-
-    @Test
-    void removeTagToNote() {
-    }
-
-    @Test
-    void getActivesByTagId() {
-    }*/
 }

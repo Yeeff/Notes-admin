@@ -14,8 +14,8 @@ public class TagService {
         this.tagRepo = tagRepo;
     }
 
-    public void saveTag(TagEntity projectObj) {
-        tagRepo.save(projectObj);
+    public TagEntity saveTag(TagEntity projectObj) {
+        return tagRepo.save(projectObj);
     }
 
     public List<TagEntity> getTagDetails(Long projectId) {

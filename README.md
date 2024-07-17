@@ -1,4 +1,4 @@
-# **Notes CRUD Application**
+# **Notes Application**
 
 This project is a application for managing text notes. The application is built using React for the frontend, Spring Boot for the backend, and PostgreSQL as the database.
 
