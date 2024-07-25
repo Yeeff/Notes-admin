@@ -3,10 +3,13 @@ import '../styles/pages/Home.css'
 import GenerilList from '../components/GenericList';
 import { getActiveNotes, archiveNote } from '../services/NoteApi';
 import { useNavigate } from 'react-router-dom';
+import useLogout from '../hooks/useLogout';
+
 
 const Home = () => {
 
   const navegate = useNavigate();
+  const handleLogout = useLogout();
 
   return (
     <div className='home'>
@@ -14,13 +17,11 @@ const Home = () => {
 
         <p><a onClick={() => navegate('/archive-notes')} class="link-offset-2" href="#">Archived Notes</a></p>
 
-
-
         <div className='add_control'>
           <i onClick={() => navegate('/form-notes')} class="fa fa-plus-circle" ></i>
           <span>Add note</span>
 
-          
+          <i class="fa fa-sign-out" aria-hidden="true" onClick={handleLogout} ></i>
 
         </div>
 
