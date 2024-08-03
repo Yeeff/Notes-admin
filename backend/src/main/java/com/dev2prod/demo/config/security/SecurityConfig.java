@@ -14,6 +14,7 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -40,16 +41,19 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(http -> {
-                    // EndPoints publicos
-                    http.requestMatchers(HttpMethod.POST, "/auth/**").permitAll();
 
-                    // EndPoints Privados
-                    http.requestMatchers(HttpMethod.GET, "/method/get").hasAuthority("READ");
-                    http.requestMatchers(HttpMethod.POST, "/method/post").hasAuthority("CREATE");
-                    http.requestMatchers(HttpMethod.DELETE, "/method/delete").hasAuthority("DELETE");
-                    http.requestMatchers(HttpMethod.PUT, "/method/put").hasAuthority("UPDATE");
+                    http.requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll();
+                    http.requestMatchers(HttpMethod.GET, "/swagger-ui/index.html").permitAll();
 
-                    http.anyRequest().permitAll();
+                    http.requestMatchers(HttpMethod.GET, "/api/notes/**").hasAnyRole("USER", "ADMIN");
+                    http.requestMatchers(HttpMethod.POST, "/api/notes/**").hasAnyRole("USER", "ADMIN");
+                    http.requestMatchers(HttpMethod.PUT, "/api/notes/**").hasAnyRole("USER", "ADMIN");
+                    http.requestMatchers(HttpMethod.PATCH, "/api/notes/**").hasAnyRole("USER", "ADMIN");
+                    http.requestMatchers(HttpMethod.DELETE, "/api/notes/**").hasAnyRole("USER", "ADMIN");
+
+                    http.requestMatchers(HttpMethod.GET, "/api/tags/**").hasAnyRole("USER", "ADMIN");
+
+                    http.anyRequest().denyAll();
                 })
                 .addFilterBefore(new JwtTokenValidator(jwtUtils), BasicAuthenticationFilter.class)
                 .build();

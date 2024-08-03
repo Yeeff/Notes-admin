@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
 import {login} from '../services/AuthApi'
+import { setToken } from '../utils/Token';
 import { useNavigate } from 'react-router-dom';
 
 const LoginPage = () => {
@@ -21,7 +22,7 @@ const LoginPage = () => {
                 password: password
             });
             const token = response.data.jwt;
-            localStorage.setItem('jwtToken', token);
+            setToken( token);
 
             navegate("/");
 
