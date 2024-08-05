@@ -12,4 +12,5 @@ public interface NoteRepository extends JpaRepository<NoteEntity, Long> {
     List<NoteEntity> findByIsArchivedFalseAndTags_Id(Long id);
     Boolean existsByTitle(String title);
     Optional<NoteEntity> findByTitle(String title);
+    List<NoteEntity> findByUserUsernameAndIsArchivedFalse(String username);
 }

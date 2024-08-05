@@ -135,4 +135,8 @@ public class NoteService {
     public List<NoteEntity> getActivesByTagId( Long id){
         return noteRepo.findByIsArchivedFalseAndTags_Id(id);
     }
+
+    public List<NoteEntity> findNotesByUsernameAndArchived(String username) {
+        return noteRepo.findByUserUsernameAndIsArchivedFalse(username);
+    }
 }

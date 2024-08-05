@@ -43,4 +43,8 @@ public class NoteEntity {
 
     private LocalDateTime createdAt = LocalDateTime.now();
     private LocalDateTime updatedAt;
+
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
+    private UserEntity user;
 }
