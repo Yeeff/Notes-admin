@@ -1,12 +1,18 @@
 package com.dev2prod.demo.services;
 
 import com.dev2prod.demo.domain.entities.NoteEntity;
+import com.dev2prod.demo.domain.entities.UserEntity;
 import com.dev2prod.demo.exceptions.EntityAlreadyExistException;
 import com.dev2prod.demo.exceptions.ResourceNotFoundException;
 import com.dev2prod.demo.repositories.NoteRepository;
 import com.dev2prod.demo.domain.entities.TagEntity;
 import com.dev2prod.demo.repositories.TagRepository;
+import com.dev2prod.demo.repositories.UserRepository;
+import com.dev2prod.demo.utils.SecurityUtils;
 import jakarta.transaction.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,16 +25,33 @@ import java.util.Set;
 public class NoteService {
     private NoteRepository noteRepo;
     private TagRepository tagRepo;
+    private UserRepository userRepo;
 
-    public NoteService(NoteRepository noteRepo, TagRepository tagRepository) {
+    private SecurityUtils securityUtils;
+
+    private final Logger logger = LoggerFactory.getLogger(NoteService.class);
+
+
+    public NoteService(NoteRepository noteRepo, TagRepository tagRepo, UserRepository userRepo, SecurityUtils securityUtils) {
         this.noteRepo = noteRepo;
-        this.tagRepo = tagRepository;
+        this.tagRepo = tagRepo;
+        this.userRepo = userRepo;
+        this.securityUtils = securityUtils;
     }
 
     public NoteEntity saveNote(NoteEntity note) {
-        try{
+
+
+        try {
+                String username = securityUtils.getCurrentUsername();
+
+                UserEntity user = userRepo.findUserEntityByUsername(username)
+                        .orElseThrow( ()-> new RuntimeException("User " + username +" not found"));
+
+                note.setUser(user);
+
             return noteRepo.save(note);
-        }catch (Exception e){
+        } catch (Exception e){
             if (e.getMessage().contains("already exists") ) {
                 throw new EntityAlreadyExistException("The Note already exist.");
             }else{
@@ -133,10 +156,25 @@ public class NoteService {
 
     @Transactional
     public List<NoteEntity> getActivesByTagId( Long id){
-        return noteRepo.findByIsArchivedFalseAndTags_Id(id);
+        String username = securityUtils.getCurrentUsername();
+
+        return noteRepo.findByUserUsernameAndIsArchivedFalseAndTags_Id(username, id);
+
     }
 
-    public List<NoteEntity> findNotesByUsernameAndArchived(String username) {
+    @Transactional
+    public List<NoteEntity> findNotesByUsernameAndActive() {
+
+        String username = securityUtils.getCurrentUsername();
+
         return noteRepo.findByUserUsernameAndIsArchivedFalse(username);
+    }
+
+    @Transactional
+    public List<NoteEntity> findNotesByUsernameAndArchived() {
+
+        String username = securityUtils.getCurrentUsername();
+
+        return noteRepo.findByUserUsernameAndIsArchivedTrue(username);
     }
 }

@@ -8,6 +8,8 @@ import com.dev2prod.demo.domain.entities.UserEntity;
 import com.dev2prod.demo.repositories.RoleRepository;
 import com.dev2prod.demo.repositories.UserRepository;
 import com.dev2prod.demo.utils.JwtUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -41,6 +43,8 @@ public class UserDetailServiceImpl implements UserDetailsService {
 
     @Autowired
     private RoleRepository roleRepository;
+
+    Logger logger = LoggerFactory.getLogger(UserDetailServiceImpl.class);
 
     @Override
     public UserDetails loadUserByUsername(String username) {
@@ -109,7 +113,7 @@ public class UserDetailServiceImpl implements UserDetailsService {
         }
 
         if (!passwordEncoder.matches(password, userDetails.getPassword())) {
-            throw new BadCredentialsException("Incorrect Password");
+            throw new BadCredentialsException("Invalid username or password");
         }
 
         return new UsernamePasswordAuthenticationToken(username, password, userDetails.getAuthorities());

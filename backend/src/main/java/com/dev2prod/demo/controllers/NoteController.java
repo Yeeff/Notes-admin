@@ -5,7 +5,10 @@ import com.dev2prod.demo.domain.entities.NoteEntity;
 import com.dev2prod.demo.exceptions.ResourceNotFoundException;
 import com.dev2prod.demo.mappers.impl.NoteMapper;
 import com.dev2prod.demo.services.NoteService;
+import com.dev2prod.demo.utils.SecurityUtils;
 import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -13,7 +16,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.function.EntityResponse;
 
+import java.net.http.HttpResponse;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,6 +28,8 @@ public class NoteController {
 
     private NoteService noteService;
     private NoteMapper mapper;
+
+    private static final Logger logger= LoggerFactory.getLogger(NoteController.class);
 
     public NoteController(NoteService noteServices, NoteMapper mapper) {
         this.noteService = noteServices;
@@ -92,16 +99,18 @@ public class NoteController {
     }
 
     @GetMapping("/active")
-    public List<NoteDto> getActiveNotes() {
-        return noteService.getActiveNotes()
+    public ResponseEntity<List<NoteDto>> getActiveNotes() {
+
+        return ResponseEntity.ok(noteService.findNotesByUsernameAndActive()
                 .stream()
                 .map(mapper::mapToDto)
-                .collect(Collectors.toList());
+                .collect(Collectors.toList())
+        );
     }
 
     @GetMapping("/archived")
     public List<NoteDto> getArchivedNotes() {
-        return noteService.getArchivedNotes()
+        return noteService.findNotesByUsernameAndArchived()
                 .stream()
                 .map(mapper::mapToDto)
                 .collect(Collectors.toList());
@@ -117,36 +126,31 @@ public class NoteController {
     }
 
     @PatchMapping("{noteId}/addTag/{tagId}")
-    public ResponseEntity<NoteEntity> assignTag(
+    public ResponseEntity<NoteDto> assignTag(
             @PathVariable Long noteId,
             @PathVariable Long tagId){
-        return ResponseEntity.status(HttpStatus.OK).body(noteService.assignTagToNote(noteId, tagId));
+
+        NoteDto noteDto = mapper.mapToDto(noteService.assignTagToNote(noteId, tagId));
+
+        return ResponseEntity.status(HttpStatus.OK).body(noteDto);
     }
 
     @PatchMapping("{noteId}/removeTag/{tagId}")
-    public ResponseEntity<NoteEntity> removeTag(
+    public ResponseEntity<NoteDto> removeTag(
             @PathVariable Long noteId,
             @PathVariable Long tagId){
-        return ResponseEntity.status(HttpStatus.OK).body(noteService.removeTagToNote(noteId, tagId));
+
+        NoteDto noteDto = mapper.mapToDto(noteService.removeTagToNote(noteId, tagId));
+
+        return ResponseEntity.status(HttpStatus.OK).body(noteDto);
     }
 
     @GetMapping("/activesByTag/{tagId}")
-    public List<NoteEntity> getActivesNotesByTagId(@PathVariable Long tagId){
-        return noteService.getActivesByTagId(tagId);
-    }
-
-    @GetMapping("/user")
-    public ResponseEntity<List<NoteDto>> getNotesByUser() {
-
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
-
-        List<NoteDto> notes = noteService.findNotesByUsernameAndArchived(username)
+    public List<NoteDto> getActivesNotesByTagId(@PathVariable Long tagId){
+        return noteService.getActivesByTagId(tagId)
                 .stream()
                 .map(mapper::mapToDto)
                 .collect(Collectors.toList());
-
-        return ResponseEntity.ok(notes);
     }
 
 }

@@ -16,6 +16,7 @@ const LoginPage = () => {
 
     const handleLogin = async (event) => {
         event.preventDefault();
+
         try {
             const response = await login( {
                 username: username,
