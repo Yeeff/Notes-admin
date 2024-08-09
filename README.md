@@ -8,12 +8,14 @@ This project is a application for managing text notes. The application is built 
 - **Archive and unarchive notes**
 - **List active and archived notes**
 - **Add and remove tags**
-- **Filter notes by tags**
+- **Role-based security with JWT authentication**
+- **Tag-based filtering and management**
 
 ## **Technologies Used**
 
 - **React**
 - **Spring Boot**
+- **Spring Security with JWT**
 - **PostgreSQL**
 
 ## **Getting Started**
@@ -69,3 +71,12 @@ This will build the application and start the frontend, backend, and PostgreSQL 
 - **database/**: PostgreSQL database setup
 - **start.sh**: Shell script to set up and run the application
 - **docker-compose.yml**: Docker Compose configuration file
+
+## **Security and Authentication**
+
+The application uses JWT for securing the API endpoints. The following two test users are available:
+
+- **username**: daniel **Password**: 1234
+- **username**: santiago **Password**: 1234
+
+These users have predefined roles and can be used to test the security and authentication features of the application.
